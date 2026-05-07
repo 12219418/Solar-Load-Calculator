@@ -93,28 +93,40 @@ def _extract_with_gemini(file_bytes, mime_type):
     for model in models:
         try:
             print(f"[Gemini REST] Trying {model}...")
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
-            payload = {
-                "contents": [{
-                    "parts": [
-                        {"text": EXTRACTION_PROMPT},
-                        {"inline_data": {"mime_type": mime_type, "data": b64_data}}
-                    ]
-                }],
-                "generationConfig": {"temperature": 0.1, "maxOutputTokens": 4096}
-            }
+            # Try v1 first, fallback to v1beta
+            api_versions = ['v1', 'v1beta']
+            success = False
+            
+            for version in api_versions:
+                url = f"https://generativelanguage.googleapis.com/{version}/models/{model}:generateContent?key={GEMINI_API_KEY}"
+                payload = {
+                    "contents": [{
+                        "parts": [
+                            {"text": EXTRACTION_PROMPT},
+                            {"inline_data": {"mime_type": mime_type, "data": b64_data}}
+                        ]
+                    }],
+                    "generationConfig": {"temperature": 0.1, "maxOutputTokens": 4096}
+                }
 
-            resp = http_requests.post(url, json=payload, timeout=60)
-
-            if resp.status_code == 429:
-                last_error = f"{model}: Rate limited (quota exhausted)"
-                print(f"[Gemini REST] {last_error}")
-                continue
-
-            if resp.status_code != 200:
-                last_error = f"{model}: HTTP {resp.status_code}"
-                print(f"[Gemini REST] {last_error}")
-                continue
+                resp = http_requests.post(url, json=payload, timeout=60)
+                
+                if resp.status_code == 200:
+                    result = resp.json()
+                    text = result['candidates'][0]['content']['parts'][0]['text']
+                    text = _clean_json_text(text)
+                    data = json.loads(text)
+                    cleaned = _clean_extracted_data(data)
+                    if cleaned:
+                        print(f"[Gemini REST] {model} ({version}) SUCCESS")
+                        return cleaned
+                    continue
+                elif resp.status_code == 429:
+                    last_error = f"{model}: Rate limited"
+                    break # Don't try other versions if rate limited
+                else:
+                    last_error = f"{model} ({version}): HTTP {resp.status_code}"
+                    print(f"[Gemini REST] {last_error}")
 
             result = resp.json()
             text = result['candidates'][0]['content']['parts'][0]['text']
@@ -146,7 +158,8 @@ def _extract_with_groq(file_bytes, mime_type):
     data_uri = f"data:{mime_type};base64,{b64_image}"
 
     # Current Groq models that may support vision
-    models = ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.3-70b-versatile']
+    # Current Groq models that support vision
+    models = ['llama-3.2-11b-vision-preview', 'llama-3.2-90b-vision-preview']
     last_error = None
 
     for model_name in models:
@@ -214,12 +227,14 @@ def _extract_with_openrouter(file_bytes, mime_type):
         headers["Authorization"] = f"Bearer {OPENROUTER_API_KEY}"
 
     # Free vision-capable models on OpenRouter
+    # Free vision-capable models on OpenRouter
     models = [
+        "google/gemini-2.0-flash-001:free",
+        "google/gemini-2.0-flash-lite-preview-02-05:free",
         "qwen/qwen-2.5-vl-72b-instruct:free",
-        "qwen/qwen-2.5-vl-32b-instruct:free",
-        "qwen/qwen-2.5-vl-7b-instruct:free",
-        "google/gemini-2.0-flash-exp:free",
-        "meta-llama/llama-4-maverick:free",
+        "qwen/qwen-2-vl-7b-instruct:free",
+        "deepseek/deepseek-chat:free", # Some non-vision models might still try to process text
+        "openrouter/auto"
     ]
     last_error = None
 
