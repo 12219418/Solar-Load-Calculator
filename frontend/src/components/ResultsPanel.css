@@ -1,0 +1,189 @@
+/* ─── Results Panel ──────────────────────────────────────────── */
+
+.results-panel {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.results-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.results-panel__header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.results-panel__header-icon {
+  color: var(--color-brand-green);
+}
+
+.results-panel__header h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+
+/* ─── Consumer Info ──────────────────────────────────────────── */
+
+.results-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.results-info__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--color-bg-glass-light);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.results-info__icon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.results-info__label {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-right: auto;
+}
+
+.results-info__value {
+  font-size: 0.82rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+/* ─── Solar Metrics ──────────────────────────────────────────── */
+
+.solar-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.solar-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 16px 8px;
+  background: var(--color-bg-glass-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.solar-metric__value {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.solar-metric__unit {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.solar-metric__label {
+  font-size: 0.68rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* ─── Table ──────────────────────────────────────────────────── */
+
+.results-table-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.results-table-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--color-bg-glass-light);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.results-table-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.results-table th {
+  padding: 8px 12px;
+  text-align: left;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.02);
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.results-table td {
+  padding: 8px 12px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.results-table tr:hover td {
+  background: var(--color-bg-glass-light);
+}
+
+.results-table__units {
+  color: var(--color-brand-green) !important;
+  font-weight: 600;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .results-info {
+    grid-template-columns: 1fr;
+  }
+  .solar-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
