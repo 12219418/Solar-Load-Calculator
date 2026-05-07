@@ -1,5 +1,9 @@
 [phases.setup]
-nixPkgs = ["python311", "nodejs"]
+nixPkgs = ["python311", "nodejs_20"]
+
+[variables]
+NODE_VERSION = "20"
+NIXPACKS_NODEJS_VERSION = "20"
 
 [phases.install]
 cmds = [
