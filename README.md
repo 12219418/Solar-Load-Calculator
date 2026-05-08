@@ -77,7 +77,6 @@ This project is optimized for **Single-Service Deployment on Railway**.
    - `OPENROUTER_API_KEY`: (Optional) OpenRouter API key.
 5. **Success**: Your app will be live at a Railway-provided URL!
 
----
 
 ## 🔑 Environment Variables
 
@@ -94,7 +93,7 @@ This project is optimized for **Single-Service Deployment on Railway**.
 |---|---|---|
 | `VITE_API_URL` | Production only | Backend URL (e.g. `https://api.energybae.in`) |
 
----
+
 
 ## 🛠️ Tech Stack
 
@@ -103,8 +102,6 @@ This project is optimized for **Single-Service Deployment on Railway**.
 - **AI**: Google Gemini, Groq Vision, OpenRouter (multi-model failover)
 - **Theme**: Renewable Energy dark mode with EnergyBae brand colors
 
----
 
-## 📄 License
 
-© 2026 EnergyBae. All rights reserved.
+
